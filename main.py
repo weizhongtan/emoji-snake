@@ -35,9 +35,13 @@ def main(stdscr):
 
         grid = Grid(WIDTH, HEIGHT)
 
-        # get player input
-        key = sys.stdin.read(1)
-        flushinp()
+        # get the last key that
+        user_input = sys.stdin.readline()
+        key = ''
+        if len(user_input) > 0:
+            key = user_input[-1]
+            flushinp()
+
         if key:
             direction = get_direction(key)
         stdscr.addstr(1, 0, 'direction: {}'.format(direction))
@@ -74,7 +78,5 @@ def main(stdscr):
 
         # 30 fps
         time.sleep(1 / 30)
-        # sys.stdout.write(clear)
-        stdscr.clear()
 
 wrapper(main)
