@@ -27,9 +27,9 @@ class Game:
 
         # write tail first so that we can check for conflicts
         for segment in p.tail():
-            grid.write(segment, p.token)
+            grid.write(segment, p.tail_token)
 
-        grid.write(p.head(), p.token)
+        grid.write(p.head(), p.head_token)
 
         if p.alive is False:
             self.spawn_player()
