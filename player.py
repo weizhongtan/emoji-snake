@@ -20,13 +20,18 @@ class Player:
 
     def set_direction(self, direction):
         if direction:
-            self.direction = direction
+            if (
+                direction == 'LEFT' and self.direction != 'RIGHT'
+                or direction == 'RIGHT' and self.direction != 'LEFT'
+                or direction == 'UP' and self.direction != 'DOWN'
+                or direction == 'DOWN' and self.direction != 'UP'
+            ):
+                self.direction = direction
 
     def grow(self):
         self._tail.append(self.head())
 
     def update(self, frame):
-
         if (frame % 3 == 0):
             # update tail
             self._tail.insert(0, self.head())
