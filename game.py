@@ -1,17 +1,19 @@
 from grid import Grid
 
 class Game:
-    def __init__(self, width, height, draw, player, food):
+    def __init__(self, width, height, player, food):
         self.w = width
         self.h = height
-        self.draw = draw
         self._frame = 0
         self.p = player
         self.f = food
 
     def start(self):
-        self.p.spawn(7, 14, 'UP')
+        self.spawn_player()
         self.f.spawn()
+
+    def spawn_player(self):
+        self.p.spawn(self.w // 2, self.h // 3, 'UP')
 
     def update(self):
         p = self.p
@@ -30,13 +32,14 @@ class Game:
         grid.write(p.head(), p.token)
 
         if p.alive is False:
-            p.spawn(7, 14, 'UP')
+            self.spawn_player()
             f.spawn()
 
         # player has eaten food, respawn food
         if p.head() == f.position():
             f.spawn()
             p.grow()
+            p.increment_score()
 
         # find a spawn position for the food
         fpos = f.position()
@@ -45,10 +48,12 @@ class Game:
             fpos = f.position()
 
         grid.write(f.position(), f.token)
+        self._grid = grid
 
-        # draw
-        self.draw([
+    def render(self):
+        return [
             f'frame:     {self._frame}',
-            f'direction: {p.direction.ljust(5)}',
-            grid.render(),
-        ])
+            f'direction: {self.p.direction.ljust(5)}',
+            self._grid.render(),
+            f'score:     {self.p.score()}',
+        ]

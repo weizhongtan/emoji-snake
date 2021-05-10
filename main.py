@@ -1,5 +1,5 @@
 import termios, fcntl, sys, os, time
-from curses import wrapper, flushinp
+from curses import wrapper, flushinp, curs_set
 from lib import get_direction
 from player import Player
 from food import Food
@@ -22,13 +22,15 @@ def main(stdscr):
     oldflags = fcntl.fcntl(fd, fcntl.F_GETFL)
     fcntl.fcntl(fd, fcntl.F_SETFL, oldflags | os.O_NONBLOCK)
 
+    curs_set(0)
+
     def draw(l):
         stdscr.addstr(0, 0, '\n'.join(l))
         stdscr.refresh()
 
     player = Player(WIDTH, HEIGHT)
     food = Food(WIDTH, HEIGHT)
-    game = Game(WIDTH, HEIGHT, draw, player, food)
+    game = Game(WIDTH, HEIGHT, player, food)
 
     game.start()
 
@@ -43,6 +45,8 @@ def main(stdscr):
             player.set_direction(direction)
 
         game.update()
+
+        draw(game.render())
 
         time.sleep(1 / FPS)
 

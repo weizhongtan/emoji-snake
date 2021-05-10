@@ -11,6 +11,10 @@ class Player:
         self._y = y
         self.direction = direction
         self._tail = []
+        self._score = 0
+
+    def score(self):
+        return self._score
 
     def head(self):
         return self._x, self._y
@@ -30,6 +34,9 @@ class Player:
 
     def grow(self):
         self._tail.append(self.head())
+
+    def increment_score(self):
+        self._score += 1
 
     def update(self, frame):
         if (frame % 3 == 0):
