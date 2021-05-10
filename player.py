@@ -2,7 +2,7 @@ class Player:
     def __init__(self, limit_x, limit_y):
         self.limit_x = limit_x
         self.limit_y = limit_y
-        self.token = '🟨'
+        self.token = '🔲'
 
     def spawn(self, x, y, direction):
         self.alive = True

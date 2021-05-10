@@ -1,4 +1,4 @@
-token = '⬜️'
+token = '🔳'
 
 class Grid:
     def __init__(self, width, height):
@@ -17,7 +17,7 @@ class Grid:
     def get(self):
         return self.g
 
-    def draw(self):
+    def render(self):
         # account for 2 vertical borders either side
         horizontal_border = token * (self.width + 2) + '\n'
         out = horizontal_border
@@ -27,4 +27,4 @@ class Grid:
                 combined_row += '  ' if val is None else val
             out += combined_row + token+ '\n'
         out += horizontal_border
-        print(out)
+        return out

@@ -4,7 +4,7 @@ class Food:
     def __init__(self, limit_x, limit_y):
         self.limit_x = limit_x
         self.limit_y = limit_y
-        self.token = '🟡'
+        self.token = '🍗'
 
     def position(self):
         return self._x, self._y
