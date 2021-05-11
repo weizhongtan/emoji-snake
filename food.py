@@ -3,6 +3,7 @@ import random, emojis
 food_emojis = [
     em.emoji
     for em in list(emojis.db.get_emojis_by_category('Food & Drink'))
+    # for some reason higher version unicode emojis don't work :(
     if em.unicode_version and float(em.unicode_version) <= 9.0
 ]
 
@@ -18,8 +19,6 @@ class Food:
         self.token = random.choice(food_emojis)
 
         # avoid spawning in the snake
-
-        # find a spawn position for the food
         self.set_rand_position()
         fpos = self.position()
         while fpos == head or fpos in tail:

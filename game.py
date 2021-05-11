@@ -50,9 +50,9 @@ class Game:
         # generate grid
         grid = Grid(self.w, self.h)
         grid.write(f.position(), f.token)
-        grid.write(p.head(), p.token)
         for segment in p.tail():
-            grid.write(segment, p.token)
+            grid.write(segment, p.tail_token)
+        grid.write(p.head(), p.head_token)
         grid_list = grid.render()
 
         def center_align(str):

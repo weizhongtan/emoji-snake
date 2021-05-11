@@ -1,10 +1,13 @@
+import emojis
+
 class Player:
     def __init__(self, limit_x, limit_y):
         self.limit_x = limit_x
         self.limit_y = limit_y
-        self.token = '🔲'
 
     def spawn(self, x, y, direction):
+        self.head_token = '🔲'
+        self.tail_token = '🔲'
         self.alive = True
         self.vel = 1
         self._x = x
@@ -39,26 +42,37 @@ class Player:
 
     def update(self, frame):
         if (frame % 3 == 0):
-            # update tail
+            # update head
+            nx, ny = self._x, self._y
+            if self.direction == 'UP':
+                ny += self.vel
+                if ny >= self.limit_y:
+                    ny = 0
+            elif self.direction == 'LEFT':
+                nx -= self.vel
+                if nx < 0:
+                    nx = self.limit_x - 1
+            elif self.direction == 'DOWN':
+                ny -= self.vel
+                if ny < 0:
+                    ny = self.limit_y - 1
+            elif self.direction == 'RIGHT':
+                nx += self.vel
+                if nx >= self.limit_x:
+                    nx = 0
+
+            # revert if dead
+            if (nx, ny) in self.tail():
+                self.alive = False
+                self.head_token = '😵'
+                return
+
+            # move start of tail into old head position
             self._tail.insert(0, self.head())
+
+            # remove end of tail
             self._tail.pop()
 
-            #  update head
-            if self.direction == 'UP':
-                self._y += self.vel
-                if self._y >= self.limit_y:
-                    self._y = 0
-            elif self.direction == 'LEFT':
-                self._x -= self.vel
-                if self._x < 0:
-                    self._x = self.limit_x - 1
-            elif self.direction == 'DOWN':
-                self._y -= self.vel
-                if self._y < 0:
-                    self._y = self.limit_y - 1
-            elif self.direction == 'RIGHT':
-                self._x += self.vel
-                if self._x >= self.limit_x:
-                    self._x = 0
-            if self.head() in self.tail():
-                self.alive = False
+            # update new head position
+            self._x = nx
+            self._y = ny
