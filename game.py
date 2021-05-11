@@ -65,7 +65,7 @@ class Game:
         }
 
         footer = center_align(messages[self._state])
-        debug = center_align(f'frame: {self._frame} dir: {p.direction.ljust(5)}')
+        debug = center_align(f'frame: {self._frame} dir: {p.direction.ljust(5)} pos: {p.head()}')
 
         return [
             *grid_list,

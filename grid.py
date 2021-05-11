@@ -12,7 +12,7 @@ class Grid:
 
     def write(self, position, val):
         x, y = position
-        self._grid[-y][x] = val
+        self._grid[y][x] = val
 
     def get(self):
         return self._grid
@@ -24,7 +24,7 @@ class Grid:
         horizontal_border = token * (self._width + 2)
         out.append(horizontal_border)
 
-        for row in self._grid:
+        for row in self._grid[::-1]:
             combined_row = ''
             for val in row:
                 combined_row += '  ' if val is None else val

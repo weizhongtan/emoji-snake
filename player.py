@@ -9,6 +9,7 @@ class Player:
         self.vel = 1
         self.head_token = '😋'
         self.tail_token = '🔲'
+        self._eat_countdown = 0
         self._x = x
         self._y = y
         self.direction = direction
@@ -46,35 +47,50 @@ class Player:
 
     def grow(self):
         self._tail.append(self.head())
+        self.head_token = '😋'
+        self._eat_countdown = 3
 
     def increment_score(self):
         self._score += 1
 
+    def kill(self):
+        self.alive = False
+        self.head_token = '😵'
+
     def update(self, frame):
-        if (frame % 3 == 0):
-            # update head
+        if (frame % 4 == 0):
+            # set revert to normal head_token if finished eating
+            if self._eat_countdown > 0:
+                self._eat_countdown -= 1
+            else:
+                self.head_token = '🙂'
+
+            # update head position
             nx, ny = self._x, self._y
             if self.direction == 'UP':
                 ny += self.vel
                 if ny >= self.limit_y:
-                    ny = 0
+                    self.kill()
+                    return
             elif self.direction == 'LEFT':
                 nx -= self.vel
                 if nx < 0:
-                    nx = self.limit_x - 1
+                    self.kill()
+                    return
             elif self.direction == 'DOWN':
                 ny -= self.vel
                 if ny < 0:
-                    ny = self.limit_y - 1
+                    self.kill()
+                    return
             elif self.direction == 'RIGHT':
                 nx += self.vel
                 if nx >= self.limit_x:
-                    nx = 0
+                    self.kill()
+                    return
 
             # revert if dead
             if (nx, ny) in self.tail():
-                self.alive = False
-                self.head_token = '😵'
+                self.kill()
                 return
 
             # move start of tail into old head position
