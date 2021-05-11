@@ -2,18 +2,15 @@ from grid import Grid
 
 class Game:
     def __init__(self, width, height, player, food):
+        self._frame = 0
         self.w = width
         self.h = height
-        self._frame = 0
         self.p = player
         self.f = food
 
     def start(self):
-        self.spawn_player()
-        self.f.spawn()
-
-    def spawn_player(self):
         self.p.spawn(self.w // 2, self.h // 3, 'UP')
+        self.f.spawn()
 
     def update(self):
         p = self.p
@@ -26,8 +23,8 @@ class Game:
         p.update(self._frame)
 
         if p.alive is False:
-            self.spawn_player()
-            f.spawn()
+            # restart
+            self.start()
 
         # player has eaten food, respawn food
         if p.head() == f.position():

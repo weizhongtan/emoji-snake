@@ -1,9 +1,7 @@
-import termios, fcntl, sys, os, time
-from curses import wrapper, flushinp, curs_set
+import termios, fcntl, sys, os, time, curses
 from lib import get_direction
 from player import Player
 from food import Food
-from grid import Grid
 from game import Game
 
 
@@ -14,7 +12,6 @@ FPS = 30
 def main(stdscr):
     fd = sys.stdin.fileno()
 
-    oldterm = termios.tcgetattr(fd)
     newattr = termios.tcgetattr(fd)
     newattr[3] = newattr[3] & ~termios.ICANON & ~termios.ECHO
     termios.tcsetattr(fd, termios.TCSANOW, newattr)
@@ -22,10 +19,14 @@ def main(stdscr):
     oldflags = fcntl.fcntl(fd, fcntl.F_GETFL)
     fcntl.fcntl(fd, fcntl.F_SETFL, oldflags | os.O_NONBLOCK)
 
-    curs_set(0)
+    curses.curs_set(0)
 
     def draw(l):
-        stdscr.addstr(0, 0, '\n'.join(l))
+        # prevent it erroring if the terminal window is not big enough
+        try:
+            stdscr.addstr(0, 0, '\n'.join(l))
+        except curses.error:
+            pass
         stdscr.refresh()
 
     player = Player(WIDTH, HEIGHT)
@@ -40,7 +41,7 @@ def main(stdscr):
         user_input = sys.stdin.readline()
         if len(user_input) > 0:
             key = user_input[-1]
-            flushinp() # discard other keys in this frame
+            curses.flushinp() # discard other keys in this frame
             direction = get_direction(key)
             player.set_direction(direction)
 
@@ -50,4 +51,4 @@ def main(stdscr):
 
         time.sleep(1 / FPS)
 
-wrapper(main)
+curses.wrapper(main)
