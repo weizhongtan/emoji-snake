@@ -25,12 +25,6 @@ class Game:
 
         p.update(self._frame)
 
-        # write tail first so that we can check for conflicts
-        for segment in p.tail():
-            grid.write(segment, p.tail_token)
-
-        grid.write(p.head(), p.head_token)
-
         if p.alive is False:
             self.spawn_player()
             f.spawn()
@@ -47,7 +41,12 @@ class Game:
             f.spawn()
             fpos = f.position()
 
+        # generate grid
         grid.write(f.position(), f.token)
+        grid.write(p.head(), p.token)
+        for segment in p.tail():
+            grid.write(segment, p.token)
+
         self._grid = grid
 
     def render(self):
