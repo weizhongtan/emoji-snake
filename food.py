@@ -14,8 +14,18 @@ class Food:
     def position(self):
         return self._x, self._y
 
-    def spawn(self):
+    def spawn(self, head, tail):
         self.token = random.choice(food_emojis)
+
+        # avoid spawning in the snake
+
+        # find a spawn position for the food
+        self.set_rand_position()
+        fpos = self.position()
+        while fpos == head or fpos in tail:
+            self.set_rand_position()
+            fpos = self.position()
+
+    def set_rand_position(self):
         self._x = random.randint(0, self._limit_x - 1)
         self._y = random.randint(0, self._limit_y - 1)
-

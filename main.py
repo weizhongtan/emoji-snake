@@ -47,8 +47,12 @@ def main(stdscr):
             action = get_action(key)
             player.set_direction(action)
 
-            if game.get_state() == game.OVER and action == 'SPACE':
-                game.start()
+            if action == 'SPACE':
+                state = game.get_state()
+                if state == game.OVER:
+                    game.start()
+                elif state == game.PAUSE:
+                    game.set_state(game.PLAY)
 
         game.update()
 

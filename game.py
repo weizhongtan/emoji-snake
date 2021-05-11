@@ -14,35 +14,38 @@ class Game:
     def start(self):
         self._frame = 0
         self.p.spawn(self.w // 2, self.h // 3, 'UP')
-        self.f.spawn()
-        self._state = Game.PLAY
+        self.f.spawn(self.p.head(), self.p.tail())
+        self.set_state(Game.PLAY)
 
     def get_state(self):
         return self._state
+
+    def set_state(self, s):
+        self._state = s
 
     def update(self):
         p = self.p
         f = self.f
 
+        if p.alive is False:
+            self.set_state(Game.OVER)
+
+        if self.get_state() in (Game.PAUSE, Game.OVER):
+            return
+
         self._frame += 1
 
         p.update(self._frame)
 
-        if p.alive is False:
-            self._state = Game.OVER
-            return
-
         # player has eaten food, respawn food
         if p.head() == f.position():
-            f.spawn()
+            f.spawn(p.head(), p.tail())
             p.grow()
             p.increment_score()
 
-        # find a spawn position for the food
-        fpos = f.position()
-        while fpos == p.head() or fpos in p.tail():
-            f.spawn()
-            fpos = f.position()
+    def render(self):
+        p = self.p
+        f = self.f
 
         # generate grid
         grid = Grid(self.w, self.h)
@@ -50,23 +53,22 @@ class Game:
         grid.write(p.head(), p.token)
         for segment in p.tail():
             grid.write(segment, p.token)
-
-        self._grid = grid
-
-    def render(self):
-        grid = self._grid.render()
+        grid_list = grid.render()
 
         def center_align(str):
-            return str.center(len(grid[0]) * 2)
+            return str.center(len(grid_list[0]) * 2)
 
-        game_over_msg = 'game over! press SPACE to restart'
-        score_msg = f'score: {str(self.p.score()).rjust(5)}'
+        messages = {
+            Game.PLAY: f'score: {str(p.score()).rjust(5)}',
+            Game.PAUSE: 'press SPACE to start',
+            Game.OVER: 'game over! press SPACE to restart',
+        }
 
-        footer = center_align(game_over_msg if self._state == Game.OVER else score_msg)
-        debug = center_align(f'frame: {self._frame} dir: {self.p.direction.ljust(5)}')
+        footer = center_align(messages[self._state])
+        debug = center_align(f'frame: {self._frame} dir: {p.direction.ljust(5)}')
 
         return [
-            *self._grid.render(),
+            *grid_list,
             footer,
             debug
         ]
