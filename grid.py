@@ -18,13 +18,18 @@ class Grid:
         return self._grid
 
     def render(self):
+        out = []
+
         # account for 2 vertical borders either side
-        horizontal_border = token * (self._width + 2) + '\n'
-        out = horizontal_border
+        horizontal_border = token * (self._width + 2)
+        out.append(horizontal_border)
+
         for row in self._grid:
-            combined_row = token
+            combined_row = ''
             for val in row:
                 combined_row += '  ' if val is None else val
-            out += combined_row + token+ '\n'
-        out += horizontal_border
+            out.append(token + combined_row + token)
+
+        out.append(horizontal_border)
+
         return out

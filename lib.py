@@ -1,10 +1,11 @@
-def get_direction(key):
+def get_action(key):
     keys = {
         "w": "UP",
         "a": "LEFT",
         "s": "DOWN",
         "d": "RIGHT",
+        " ": "SPACE",
     }
     if key in keys:
         return keys[key]
-    return None
+    return "ANY"

@@ -1,5 +1,5 @@
 import termios, fcntl, sys, os, time, curses
-from lib import get_direction
+from lib import get_action
 from player import Player
 from food import Food
 from game import Game
@@ -10,6 +10,7 @@ WIDTH = 20
 FPS = 30
 
 def main(stdscr):
+    # setup stdin to accept keyboard input as non-blocking
     fd = sys.stdin.fileno()
 
     newattr = termios.tcgetattr(fd)
@@ -19,6 +20,7 @@ def main(stdscr):
     oldflags = fcntl.fcntl(fd, fcntl.F_GETFL)
     fcntl.fcntl(fd, fcntl.F_SETFL, oldflags | os.O_NONBLOCK)
 
+    # hide cursor
     curses.curs_set(0)
 
     def draw(l):
@@ -42,8 +44,11 @@ def main(stdscr):
         if len(user_input) > 0:
             key = user_input[-1]
             curses.flushinp() # discard other keys in this frame
-            direction = get_direction(key)
-            player.set_direction(direction)
+            action = get_action(key)
+            player.set_direction(action)
+
+            if game.is_game_over() and action == 'SPACE':
+                game.start()
 
         game.update()
 

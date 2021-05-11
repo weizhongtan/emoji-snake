@@ -23,14 +23,13 @@ class Player:
         return self._tail
 
     def set_direction(self, direction):
-        if direction:
-            if (
-                direction == 'LEFT' and self.direction != 'RIGHT'
-                or direction == 'RIGHT' and self.direction != 'LEFT'
-                or direction == 'UP' and self.direction != 'DOWN'
-                or direction == 'DOWN' and self.direction != 'UP'
-            ):
-                self.direction = direction
+        if direction and (
+            direction == 'LEFT' and self.direction != 'RIGHT'
+            or direction == 'RIGHT' and self.direction != 'LEFT'
+            or direction == 'UP' and self.direction != 'DOWN'
+            or direction == 'DOWN' and self.direction != 'UP'
+        ):
+            self.direction = direction
 
     def grow(self):
         self._tail.append(self.head())

@@ -2,15 +2,19 @@ from grid import Grid
 
 class Game:
     def __init__(self, width, height, player, food):
-        self._frame = 0
         self.w = width
         self.h = height
         self.p = player
         self.f = food
 
     def start(self):
+        self._frame = 0
         self.p.spawn(self.w // 2, self.h // 3, 'UP')
         self.f.spawn()
+        self._game_over = False
+
+    def is_game_over(self):
+        return self._game_over
 
     def update(self):
         p = self.p
@@ -18,13 +22,11 @@ class Game:
 
         self._frame += 1
 
-        grid = Grid(self.w, self.h)
-
         p.update(self._frame)
 
         if p.alive is False:
-            # restart
-            self.start()
+            self._game_over = True
+            return
 
         # player has eaten food, respawn food
         if p.head() == f.position():
@@ -39,6 +41,7 @@ class Game:
             fpos = f.position()
 
         # generate grid
+        grid = Grid(self.w, self.h)
         grid.write(f.position(), f.token)
         grid.write(p.head(), p.token)
         for segment in p.tail():
@@ -47,9 +50,19 @@ class Game:
         self._grid = grid
 
     def render(self):
+        grid = self._grid.render()
+
+        def center_align(str):
+            return str.center(len(grid[0]) * 2)
+
+        game_over_msg = 'game over! press SPACE to restart'
+        score_msg = f'score: {str(self.p.score()).rjust(5)}'
+
+        footer = center_align(game_over_msg if self._game_over else score_msg)
+        debug = center_align(f'frame: {self._frame} dir: {self.p.direction.ljust(5)}')
+
         return [
-            f'frame:     {self._frame}',
-            f'direction: {self.p.direction.ljust(5)}',
-            self._grid.render(),
-            f'score:     {self.p.score()}',
+            *self._grid.render(),
+            footer,
+            debug
         ]
