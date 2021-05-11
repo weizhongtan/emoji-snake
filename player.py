@@ -1,20 +1,30 @@
-import emojis
-
 class Player:
     def __init__(self, limit_x, limit_y):
         self.limit_x = limit_x
         self.limit_y = limit_y
 
     def spawn(self, x, y, direction):
-        self.head_token = '🔲'
-        self.tail_token = '🔲'
         self.alive = True
+        self._score = 0
         self.vel = 1
+        self.head_token = '😋'
+        self.tail_token = '🔲'
         self._x = x
         self._y = y
         self.direction = direction
-        self._tail = []
-        self._score = 0
+
+        # generate tail behind starting direction
+        INIT_TAIL_LEN = 3
+        if direction == 'UP':
+            nt = [(self._x, self._y - i - 1) for i in range(INIT_TAIL_LEN)]
+        elif direction == 'LEFT':
+            nt = [(self._x + i + 1, self._y) for i in range(INIT_TAIL_LEN)]
+        elif direction == 'DOWN':
+            nt = [(self._x, self._y + i + 1) for i in range(INIT_TAIL_LEN)]
+        elif direction == 'RIGHT':
+            nt = [(self._x - i - 1, self._y) for i in range(INIT_TAIL_LEN)]
+
+        self._tail = nt
 
     def score(self):
         return self._score
