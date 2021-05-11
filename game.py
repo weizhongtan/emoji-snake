@@ -1,6 +1,10 @@
 from grid import Grid
 
 class Game:
+    PLAY = 0
+    PAUSE = 1
+    OVER = 2
+
     def __init__(self, width, height, player, food):
         self.w = width
         self.h = height
@@ -11,10 +15,10 @@ class Game:
         self._frame = 0
         self.p.spawn(self.w // 2, self.h // 3, 'UP')
         self.f.spawn()
-        self._game_over = False
+        self._state = Game.PLAY
 
-    def is_game_over(self):
-        return self._game_over
+    def get_state(self):
+        return self._state
 
     def update(self):
         p = self.p
@@ -25,7 +29,7 @@ class Game:
         p.update(self._frame)
 
         if p.alive is False:
-            self._game_over = True
+            self._state = Game.OVER
             return
 
         # player has eaten food, respawn food
@@ -58,7 +62,7 @@ class Game:
         game_over_msg = 'game over! press SPACE to restart'
         score_msg = f'score: {str(self.p.score()).rjust(5)}'
 
-        footer = center_align(game_over_msg if self._game_over else score_msg)
+        footer = center_align(game_over_msg if self._state == Game.OVER else score_msg)
         debug = center_align(f'frame: {self._frame} dir: {self.p.direction.ljust(5)}')
 
         return [

@@ -1,4 +1,5 @@
 {
   "python.linting.pylintEnabled": true,
-  "python.linting.enabled": true
+  "python.linting.enabled": true,
+  "python.pythonPath": "/Users/wzt/.local/share/virtualenvs/emoji-snake-ltjjt4Hl/bin/python"
 }

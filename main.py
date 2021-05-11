@@ -47,7 +47,7 @@ def main(stdscr):
             action = get_action(key)
             player.set_direction(action)
 
-            if game.is_game_over() and action == 'SPACE':
+            if game.get_state() == game.OVER and action == 'SPACE':
                 game.start()
 
         game.update()
