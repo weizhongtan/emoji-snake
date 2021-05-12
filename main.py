@@ -33,7 +33,7 @@ def main(stdscr):
 
     player = Player(WIDTH, HEIGHT)
     food = Food(WIDTH, HEIGHT)
-    game = Game(WIDTH, HEIGHT, player, food)
+    game = Game(WIDTH, HEIGHT, player, food, Debug=os.environ.get('DEBUG'))
 
     game.start()
 

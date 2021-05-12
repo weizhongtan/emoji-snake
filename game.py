@@ -5,11 +5,12 @@ class Game:
     PAUSE = 1
     OVER = 2
 
-    def __init__(self, width, height, player, food):
+    def __init__(self, width, height, player, food, Debug):
         self.w = width
         self.h = height
         self.p = player
         self.f = food
+        self.debug = Debug
 
     def start(self):
         self._frame = 0
@@ -70,5 +71,5 @@ class Game:
         return [
             *grid_list,
             footer,
-            debug
+            debug if self.debug else ''
         ]
