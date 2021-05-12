@@ -2,16 +2,10 @@
 
 Snake with emojis in the terminal.
 
-## Run
+## Build and run
 
 ```sh
-python main.py
-```
-
-## Build and run executable
-
-```sh
-pipenv install
+make install
 make build
 make run
 ```

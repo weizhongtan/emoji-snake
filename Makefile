@@ -1,6 +1,9 @@
-.PHONY: build run
-build:
-	pipenv run pyinstaller --clean main.py
+.PHONY: install build run
+install:
+	pipenv install
 
-run:
+build:
+	pipenv run pyinstaller main.py
+
+run: dist/main/main
 	dist/main/main
