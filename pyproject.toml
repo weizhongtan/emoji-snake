@@ -1,0 +1,21 @@
+# ---
+# dependencies:
+#   python.org: 3.11.1
+# ---
+
+[tool.poetry]
+name = "emoji-snake"
+version = "0.1.0"
+description = ""
+authors = ["weizhongtan <me@wztan.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.11.1"
+emojis = "^0.7.0"
+pyinstaller = "^5.8.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
