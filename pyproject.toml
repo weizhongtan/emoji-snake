@@ -11,7 +11,7 @@ authors = ["weizhongtan <me@wztan.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "3.11.1"
+python = "3.11.5"
 emojis = "^0.7.0"
 pyinstaller = "^5.8.0"
 
